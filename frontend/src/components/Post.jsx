@@ -5,15 +5,19 @@ import { Link } from "react-router-dom"
 
 
 function Post(props) {
+  const context = props.context
+  console.log(context)
   const { id, title, body, publish, author } = props.post
 
   const publishFormated = moment(publish).format('MMM Do YYYY, h:mm a')
 
+  console.log(props.titleLink)
   return (
     <Container>
-      <Title>{title}</Title>
+      <Link to={`${props.titleLink}`}><Title>{title}</Title></Link>
       <Info>Published {publishFormated} by {author.username}</Info>
       <Text>{body}</Text>
+      <Link to={`${props.shareLink}`}><Share>Share this post</Share></Link>
     </Container>
   )
 }
@@ -43,10 +47,20 @@ const Info = styled.div`
   color: #7C7C7C;
 `
 const Text = styled.div`
-  padding: 20px;
+  padding: 20px 20px 10px 20px;
   color: #170A1C;
   font-size: 16px;
   line-height: 24px;
+`
+const Share = styled.p`
+  font-size: 1rem;
+  color: #0B7189;
+  /* text-decoration: underline; */
+  padding: 0 0 20px 20px;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
 `
 
 export default Post

@@ -2,33 +2,21 @@ import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import Post from "./Post"
 import axios from "axios"
+import { useContext } from "react"
+import { PostsContext } from "../context/PostsContext"
+import NotFound from "./NotFound"
 
-function PostDetail2() {
+function PostDetail() {
   const { id } = useParams()
-  const [post, setPost] = useState({})
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(`/api/blog/posts/${id}`)
-        setPost(response.data)
-      } catch(error) {
-        console.log(error.response)
-      }
-    }
-    fetchData()
-  }, [])
-
-  if (Object.keys(post).length > 0) {
-    return (
-      <Post keys={post.id} post={post} />
-    )
-  }
-
+  const posts = useContext(PostsContext)
+  const post = posts.find(post => post.id == id)
+  
   return (
     <>
+      {post ? <Post keys={post.id} post={post} titleLink={post.id}
+        shareLink={`share`} /> : <NotFound />}
     </>
   )
 }
 
-export default PostDetail2
+export default PostDetail

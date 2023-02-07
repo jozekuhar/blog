@@ -1,29 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link } from "react-router-dom"
 import styled from 'styled-components'
 import axios from "axios"
 import PostDetail from './Post'
+import { PostsContext } from '../context/PostsContext'
 
 function PostList() {
-  const [posts, setPosts] = useState([])
+  const posts = useContext(PostsContext)
 
   const postsList = posts.map(post => {
     return (
-      <Link to={`${post.id}`} key={post.id}><PostDetail post={post}/></Link>
+      <PostDetail 
+        key={post.id} 
+        post={post}
+        titleLink={post.id}
+        shareLink={`${post.id}/share`}
+      />
     )
   })
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get("/api/blog/posts/")
-        setPosts(response.data)
-      } catch(error) {
-        console.log(error.response)
-      }
-    }
-    fetchData()
-  }, [])
 
   return (
     <>
