@@ -5,11 +5,11 @@ import "./App.css"
 import "./axios/global"
 import { PostsContext } from "./context/PostsContext"
 import axios from "axios"
+import UserPostList from "./components/UserPostList"
 
 function App() {
   const [posts, setPosts] = useState([])
 
-  console.log(posts)
 
   useEffect(() => {
     async function fetchData() {
@@ -29,11 +29,12 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="posts">
+        <Route path="/posts">
           <Route index element={<PostList />}/>
           <Route path=":id" element={<PostDetail />} />
           <Route path=":id/share" element={<PostShare />} />
         </Route>
+        <Route path="/users/:username" element={<UserPostList />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </PostsContext.Provider>

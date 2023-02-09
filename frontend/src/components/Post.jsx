@@ -6,16 +6,14 @@ import { Link } from "react-router-dom"
 
 function Post(props) {
   const context = props.context
-  console.log(context)
   const { id, title, body, publish, author } = props.post
 
   const publishFormated = moment(publish).format('MMM Do YYYY, h:mm a')
 
-  console.log(props.titleLink)
   return (
     <Container>
       <Link to={`${props.titleLink}`}><Title>{title}</Title></Link>
-      <Info>Published {publishFormated} by {author.username}</Info>
+      <Info>Published {publishFormated} by <Link style={{textDecoration: "underline"}} to={"/users/" + author.username}>{author.username}</Link></Info>
       <Text>{body}</Text>
       <Link to={`${props.shareLink}`}><Share>Share this post</Share></Link>
     </Container>

@@ -13,7 +13,7 @@ function PostDetail() {
   
   return (
     <>
-      {post ? <Post keys={post.id} post={post} titleLink={post.id}
+      {post ? <Post keys={post.id} post={post} titleLink=""
         shareLink={`share`} /> : <NotFound />}
     </>
   )

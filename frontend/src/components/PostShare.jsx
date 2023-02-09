@@ -2,6 +2,7 @@ import { useContext, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 import { PostsContext } from "../context/PostsContext"
+import axios from "axios"
 
 function PostShare() {
   const { id } = useParams()
@@ -13,8 +14,7 @@ function PostShare() {
     email_to: "",
     comment: "",
   })
-
-  console.log(formData)
+  const [response, setResponse] = useState("")
 
   function handleChange(e) {
     setFormData(prev => ({...prev, [e.target.name]: e.target.value}))
@@ -22,6 +22,24 @@ function PostShare() {
 
   function handleSubmit(e) {
     e.preventDefault()
+    async function sendEmail() {
+      try {
+        const response = await axios.post(`/api/blog/posts/${id}/share/`, formData)
+        setResponse(response.data)
+        setFormData({
+          name: "",
+          email_from: "",
+          email_to: "",
+          comment: "",
+        })
+        const deleteResponse = setTimeout(() => {
+          setResponse("")
+        }, 2000)
+      } catch(error) {
+        console.log(error.response)
+      }
+    }
+    sendEmail()
   }
 
   return (
@@ -56,6 +74,9 @@ function PostShare() {
           value={formData.comment}
           onChange={handleChange}
         />
+        <Info>
+          {response ? "Post was succesfully shared!" : <></>}
+        </Info>
         <Button>
           <button>Share Post</button>
         </Button>
@@ -125,5 +146,10 @@ const Title = styled.div`
   font-weight: 600;
 `
 
+const Info = styled.div`
+  color: green;
+  margin-bottom: 10px;
+  text-align: center;
+`
 
 export default PostShare
