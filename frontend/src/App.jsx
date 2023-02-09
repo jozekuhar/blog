@@ -9,13 +9,15 @@ import UserPostList from "./components/UserPostList"
 
 function App() {
   const [posts, setPosts] = useState([])
+  const [count, setCount] = useState(0)
 
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`/api/blog/posts/`)
-        setPosts(response.data)
+        const response = await axios.get(`/api/blog/posts/?limit=99999&offset=0`)
+        setCount(response.data.count)
+        setPosts(response.data.results)
       } catch(error) {
         console.log(error.response)
       }
@@ -25,13 +27,13 @@ function App() {
 
   return (
     <>
-    <PostsContext.Provider value={posts}>
+    <PostsContext.Provider value={{posts, count}}>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/posts">
           <Route index element={<PostList />}/>
-          <Route path=":id" element={<PostDetail />} />
+          <Route path=":year/:month/:day/:slug" element={<PostDetail />} />
           <Route path=":id/share" element={<PostShare />} />
         </Route>
         <Route path="/users/:username" element={<UserPostList />} />

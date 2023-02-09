@@ -7,7 +7,7 @@ import axios from "axios"
 function PostShare() {
   const { id } = useParams()
   const posts = useContext(PostsContext)
-  const post = posts.find(post => post.id == id)
+  const post = posts.posts.find(post => post.id == id)
   const [formData, setFormData] = useState({
     name: "",
     email_from: "",

@@ -1,3 +1,6 @@
 import { createContext } from "react"
 
-export const PostsContext = createContext([])
+const PostsContext = createContext([])
+const CountContext = createContext(0)
+
+export { PostsContext, CountContext }

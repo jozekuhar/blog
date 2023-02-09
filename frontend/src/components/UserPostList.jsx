@@ -9,8 +9,6 @@ function UserPostList() {
   const { username } = useParams()
   const [posts, setPosts] = useState([])
 
-  console.log(username)
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -22,8 +20,6 @@ function UserPostList() {
     }
     fetchData()
   }, [])
-
-  console.log(posts)
 
   const postsList = posts.map(post => {
     return (
