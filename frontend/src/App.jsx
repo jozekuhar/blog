@@ -6,10 +6,12 @@ import "./axios/global"
 import { PostsContext } from "./context/PostsContext"
 import axios from "axios"
 import UserPostList from "./components/UserPostList"
+import TagList from "./components/Tags/TagList"
 
 function App() {
   const [posts, setPosts] = useState([])
   const [count, setCount] = useState(0)
+  const [message, setMessage] = useState("")
 
 
   useEffect(() => {
@@ -23,11 +25,11 @@ function App() {
       }
     }
     fetchData()
-  }, [])
+  }, [message])
 
   return (
     <>
-    <PostsContext.Provider value={{posts, count}}>
+    <PostsContext.Provider value={{posts, count, message, setMessage}}>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -37,6 +39,7 @@ function App() {
           <Route path=":id/share" element={<PostShare />} />
         </Route>
         <Route path="/users/:username" element={<UserPostList />} />
+        <Route path="/tags/:slug" element={<TagList />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </PostsContext.Provider>

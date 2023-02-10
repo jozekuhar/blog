@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 
 class PublishManager(models.Manager):
@@ -20,6 +21,17 @@ class CustomManager(models.Manager):
         queryset = Post.objects.filter(title="testiram")
         return queryset
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    def save(self):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save()
 
 class Post(models.Model):
 
@@ -38,6 +50,7 @@ class Post(models.Model):
     # Post.Status.choices, Post.Status.names, Post.Status.labels
     author = models.ForeignKey(User, related_name="blog_posts", on_delete=models.CASCADE)
     # Related name je za dostop do podatkov. Recimo User.blog_posts.all()
+    tags = models.ManyToManyField(Tag)
 
     objects = models.Manager()
     published = PublishManager() # custom manager for published posts
@@ -76,3 +89,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.name} on {self.post}"
+
+

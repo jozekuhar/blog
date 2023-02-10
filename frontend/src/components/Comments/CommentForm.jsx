@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { PostsContext } from '../../context/PostsContext'
 import styled from 'styled-components'
 import axios from "axios"
 
 function CommentForm(props) {
+  const { message, setMessage } = useContext(PostsContext)
+  console.log(message)
   const { id } = props.post
   const [formData, setFormData] = useState({
     "post": id,
@@ -10,7 +13,6 @@ function CommentForm(props) {
     "email": "",
     "body": ""
   })
-  const [response, setResponse] = useState()
 
   function handleChange(e) {
     setFormData(prev => ({...prev, [e.target.name]: e.target.value}))
@@ -21,7 +23,7 @@ function CommentForm(props) {
     async function sendData() {
       try {
         const response = await axios.post("/api/blog/posts/comment/create/", formData)
-        setResponse(response.data)
+        setMessage(response.data)
       } catch(error) {
         console.log(error.response)
       }
@@ -36,7 +38,7 @@ function CommentForm(props) {
         <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
         <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
         <textarea type="text" name="body" placeholder="Comment" value={formData.body} onChange={handleChange} required />
-        <Info>{response ? response.success : <></>}</Info>
+        <Info>{message ? message.success : <></>}</Info>
         <Button><button>Comment</button></Button>
       </form>
     </Container>

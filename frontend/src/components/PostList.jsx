@@ -7,18 +7,18 @@ import { PostsContext } from '../context/PostsContext'
 
 function PostList() {
   const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(false)
   const { count } = useContext(PostsContext)
-  const limit = 2
+  const limit = 4
   const [offset, setOffset] = useState(0)
   const pages = count / limit
-
-  console.log(offset)
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await axios.get(`http://localhost:8000/api/blog/posts/?limit=${limit}&offset=${offset}`)
         setPosts(response.data.results)
+        setLoading(prev => true)
       } catch(error) {
         console.log(error.response)
       }
@@ -50,7 +50,7 @@ function PostList() {
     <>
      {postsList}
      <Container>
-      {paginatorButton}
+      {loading ? paginatorButton : <></>}
      </Container>
     </>
   )

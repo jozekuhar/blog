@@ -2,7 +2,7 @@ from django.urls import reverse
 
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,6 +11,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             "username"
         ]
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -33,6 +38,8 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     comments = CommentSerializer(many=True)
+    tags = TagSerializer(many=True)
+    # tags = TagSerializer(many=True)
     # url = serializers.SerializerMethodField()
     # url2 = serializers.URLField(source="get_absolute_url")
     # url3 = serializers.SerializerMethodField()

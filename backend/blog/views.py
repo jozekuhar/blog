@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Post
-from .serializers import PostSerializer, CommentSerializer, CommentCreateSerializer
+from .models import Post, Tag
+from .serializers import PostSerializer, CommentSerializer, CommentCreateSerializer, TagSerializer
 
 
 class PostList(APIView, LimitOffsetPagination):
@@ -53,4 +53,24 @@ class UserPostList(APIView):
         user = User.objects.get(username=username)
         queryset = Post.objects.filter(author=user.id)
         serializer = PostSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class TagPostList(APIView):
+    def get(self, request, slug):
+        tag = Tag.objects.get(slug=slug)
+        queryset = Post.objects.filter(tags=tag)
+        serializer = PostSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class TagList(APIView):
+    def get(self, request):
+        queryset = Tag.objects.all()
+        serializer = TagSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class TagDetail(APIView):
+    def get(self, request, slug):
+        tag = Tag.objects.get(slug=slug)
+        serializer = TagSerializer(tag)
         return Response(serializer.data)
