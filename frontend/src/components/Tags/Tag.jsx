@@ -4,8 +4,7 @@ import { Link } from "react-router-dom"
 
 function Tag(props) {
   const tag = props.tag
-  console.log(props.tag)
-
+  
   return (
     <Container>
       <Link to={`/tags/${tag.slug}`}>{tag.name.toUpperCase()}</Link>

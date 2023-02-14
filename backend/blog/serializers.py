@@ -35,6 +35,12 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         ]
 
 
+class RecentPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ["id", "title", "publish", "slug"]
+
+
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     comments = CommentSerializer(many=True)

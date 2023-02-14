@@ -9,7 +9,7 @@ function PostList() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(false)
   const { count } = useContext(PostsContext)
-  const limit = 4
+  const limit = 2
   const [offset, setOffset] = useState(0)
   const pages = count / limit
 
@@ -38,7 +38,8 @@ function PostList() {
   })
 
   function handleClick(event) {
-    setOffset(prev => event)
+    window.scrollTo(0,0)
+    setOffset(prev => event)    
   }
 
   const paginatorButton = []

@@ -1,25 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import moment from "moment"
 import { Link } from "react-router-dom"
 import Tag from './Tags/Tag'
+import axios from 'axios'
 
 
 function Post(props) {
   const { id, title, slug, body, publish, author, comments, tags } = props.post
+  
   
   const publishFormated = moment(publish).format('MMM Do YYYY, h:mm a')
   const year = moment(publish).format("YYYY")
   const month = moment(publish).format("MM")
   const day = moment(publish).format("DD")
 
-  console.log(tags)
-
   const listTags = tags.map(tag => {
     return <Tag key={tag.id} tag={tag} />
-  })
+  })  
 
   return (
+    <>
     <Container>
       <Link to={`/posts/${year}/${month}/${day}/${slug}`}><Title>{title}</Title></Link>
       <Tags>{listTags}</Tags>
@@ -28,6 +29,7 @@ function Post(props) {
       <Text>{body}</Text>
       <Link to={`${props.shareLink}`}><Share>Share this post</Share></Link>
     </Container>
+    </>
   )
 }
 

@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db.models import Count
 from rest_framework.pagination import LimitOffsetPagination
 
 from rest_framework import status
@@ -8,23 +9,44 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Post, Tag
-from .serializers import PostSerializer, CommentSerializer, CommentCreateSerializer, TagSerializer
+from .serializers import PostSerializer, CommentSerializer, CommentCreateSerializer, TagSerializer, RecentPostSerializer
 
 
 class PostList(APIView, LimitOffsetPagination):
     def get(self, request):
         queryset = Post.published.all()
         results = self.paginate_queryset(queryset, request, view=self)
-        serializer = PostSerializer(results, many=True, context={"request": request})
-        
+        serializer = PostSerializer(results, many=True, context={"request": request})    
         return self.get_paginated_response(serializer.data)
 
+
+class RecentPostList(APIView):
+    def get(self, request):
+        queryset = Post.published.all()[:5]
+        serializer = RecentPostSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class MostCommentedPosts(APIView):
+    def get(self, request):
+        queryset = Post.published.annotate(most_comments=Count("comments")).order_by("-most_comments")[:5]
+        serializer = RecentPostSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class PostDetail(APIView):
     def get(self, request, id):
         object = get_object_or_404(Post, id=id, status=Post.Status.PUBLISHED)
         serializer = PostSerializer(object, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class SimilarPostDetail(APIView):
+    def get(self, request, id):
+        post = get_object_or_404(Post, id=id, status=Post.Status.PUBLISHED)
+        tags_in_post = post.tags.values_list("id", flat=True)
+        similar_posts = Post.objects.filter(tags__in=tags_in_post).exclude(id=post.id)
+        similar_posts.annotate(same_tags=Count("tags")).order_by("-same_tags", "-publish")[:5]
+        serializer = RecentPostSerializer(similar_posts, many=True)
+        return Response(serializer.data)
 
 
 class PostDetailCommentCreate(APIView):
@@ -34,7 +56,7 @@ class PostDetailCommentCreate(APIView):
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
         serializer.save()
-        return Response({"success": "Comment was succesfully published!"})
+        return Response({"success": "Comment was succesfully published!"}, status=status.HTTP_201_CREATED)
 
 
 class PostShare(APIView):

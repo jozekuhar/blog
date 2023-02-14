@@ -27,8 +27,6 @@ function TagList() {
     return <Post key={post.id} post={post}/>
   })
 
-  console.log(posts)
-
   return (
     <Container>
       <Title>Posts with tag: <Tag>{tag.name}</Tag></Title>

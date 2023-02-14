@@ -5,7 +5,10 @@ app_name = "blog"
 
 urlpatterns = [
     path("posts/", views.PostList.as_view(), name="post_list"),
+    path("posts/recent/", views.RecentPostList.as_view(), name="recent_post_list"),
+    path("posts/most-commented/", views.MostCommentedPosts.as_view(), name="recent_post_list"),
     path("posts/<int:id>/", views.PostDetail.as_view(), name="post_detail"),
+    path("posts/<int:id>/similar/", views.SimilarPostDetail.as_view(), name="post_detail"),
     path("posts/<int:id>/share/", views.PostShare.as_view(), name="post_share"),
     path("posts/comment/create/", views.PostDetailCommentCreate.as_view(), name="post_create"),
     path("posts/tags/", views.TagList.as_view(), name="tag_list"),

@@ -5,7 +5,6 @@ import axios from "axios"
 
 function CommentForm(props) {
   const { message, setMessage } = useContext(PostsContext)
-  console.log(message)
   const { id } = props.post
   const [formData, setFormData] = useState({
     "post": id,
@@ -23,7 +22,8 @@ function CommentForm(props) {
     async function sendData() {
       try {
         const response = await axios.post("/api/blog/posts/comment/create/", formData)
-        setMessage(response.data)
+        setTimeout(setMessage(response.data), 2000)
+        setMessage("")
       } catch(error) {
         console.log(error.response)
       }

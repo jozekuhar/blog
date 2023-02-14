@@ -8,6 +8,7 @@ import NotFound from "./NotFound"
 import moment from "moment"
 import styled from "styled-components"
 import Comments from "./Comments/Comments"
+import PostSimilar from "./PostSimilar"
 
 function PostDetail() {
   const params = useParams()
@@ -17,14 +18,16 @@ function PostDetail() {
     moment(post.publish).format("MM") == params.month &&
     moment(post.publish).format("DD") == params.day
   )
-  const post_detail = post ? <Post keys={post.id} post={post} titleLink=""
+  const postDetail = post ? <Post keys={post.id} post={post} titleLink=""
   shareLink={`/posts/${post.id}/share`} /> : <NotFound />
-  const post_comments = post ? <Comments post={post} /> : <></>
+  const postComments = post ? <Comments post={post} /> : <></>
+  const postSimilar = post ? <PostSimilar post={post} /> : <></>
   
   return (
     <>
-      {post_detail}
-      {post_comments}
+      {postDetail}
+      {postSimilar}
+      {postComments}
     </>
   )
 }

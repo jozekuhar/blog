@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react"
 import { Routes, Route } from "react-router-dom"
-import { Home, Navbar, PostList, PostDetail, PostShare, NotFound } from "./components"
-import "./App.css"
-import "./axios/global"
+import { Navbar, Sidebar } from "./layouts"
+import { Home, PostList, PostDetail, PostShare, NotFound } from "./components"
 import { PostsContext } from "./context/PostsContext"
-import axios from "axios"
 import UserPostList from "./components/UserPostList"
 import TagList from "./components/Tags/TagList"
+import axios from "axios"
+import "./App.css"
+import "./axios/global"
+
 
 function App() {
   const [posts, setPosts] = useState([])
@@ -31,6 +33,7 @@ function App() {
     <>
     <PostsContext.Provider value={{posts, count, message, setMessage}}>
       <Navbar />
+      <Sidebar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/posts">
